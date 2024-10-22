@@ -100,7 +100,7 @@
 
             for (const imageUrl of imageUrls) {
                 try {
-                    const result = await detector.analyzeImage(imageUrl);
+                    const result = await detector.isNsfw(imageUrl);
                     displayImageWithResults(imageUrl, result);
                 } catch (error) {
                     console.error("Error processing image:", imageUrl, error);
@@ -121,6 +121,10 @@
             resultOverlay.className = 'result-overlay';
             resultOverlay.innerHTML = `NSFW: ${result.isNSFW ? 'Yes' : 'No'}`;
 
+            if (result.results && result.results.length > 0) {
+                resultOverlay.innerHTML += `<br>Top class: ${result.results[0].className} (${(result.results[0].probability * 100).toFixed(2)}%)`;
+            }
+
             container.appendChild(imgElement);
             container.appendChild(resultOverlay);
             contentDiv.appendChild(container);
@@ -128,3 +132,4 @@
     </script>
 </body>
 </html>
+
