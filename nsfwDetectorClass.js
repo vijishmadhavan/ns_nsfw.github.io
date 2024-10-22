@@ -45,7 +45,7 @@ class NsfwDetector {
         results.sort((a, b) => b.probability - a.probability);
 
         // Determine if the image is NSFW
-        const isNSFW = predictions[1] > 0.1 || predictions[3] > 0.1 || predictions[4] > 0.1;
+        const isNSFW = predictions[1] > 0.2 || predictions[3] > 0.2 || predictions[4] > 0.2;
 
         const result = {
             isNSFW,
