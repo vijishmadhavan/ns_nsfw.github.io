@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>NSFW and Age Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.2/dist/face-api.js"></script>
+    <script src="./nsfwDetectorClass.js" defer></script>
+    <script src="./combinedDetector.js" defer></script>
+    <style>
+        .image-container {
+            display: inline-block;
+            margin: 10px;
+            vertical-align: top;
+            position: relative;
+        }
+        .image-container img {
+            max-width: 200px;
+            height: auto;
+        }
+        .result-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <p>Serving: <code class="code">TensorFlow.js NSFW and Age Classification</code></p>
+    </div>
+    <div id="root">
+        <div class="App">
+            <div class="content">
+                <!-- Images and classification results will be displayed here -->
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = async () => {
+            const imageUrls = [
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-m2ukiW67eP8Irne.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-SPSgUoP8QeCNc36.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-sydUc2n4aYPzBNi.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-bE7D1Lqjkgb0m5o.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-7P3t5q1MaB0FR1V.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-zuF6wdrkwcwhj6E.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-atgCGYBJhvY7pfl.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-csE8twIfxdLscQx.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-K9PnfaXGj8pXSf4.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-p9eAnbubYIvHMRy.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-XLcs41aN6iNGmUH.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-a2s0FHugVwRatfQ.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-P4bKN2mYkkBPRDX.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-x5r9Yjj9tjAusWA.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-R7DstGj2gcqS1l8.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-Ge99rdd35UHuPpk.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-TxIdsN6LrfW2XT8.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-qgVLr05XzXYB5Go.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-01iq4q7WPanCD6R.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/20-AU8xZq3i4HOLKAw.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-4g7MyiQ9xG9tpJ1.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-greGV1WFlNSh4nN.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-qSqmNGyZPzvo0nQ.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-n33oEGCbx1zN9BR.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-eEbRekkhOzIBRFL.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-WdvYTOIhUWHeQrp.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-vhu4WRsDPG2v2im.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-LRTx8JIPp34Mjxa.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-BcLrzVl5fJ8uEiM.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-JyRniiPqrfmkX2S.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-xqHobfBsmVxykQ9.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-UD5Dj7biJCx0y8o.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-lksL0UIaEC8cfle.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-yPD04PSThfH8Nzc.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-OVcWfAcZ8rhqxwk.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-tdWIwjxptaYLYET.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-Kpygx8IbC1OBR3u.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-ZBojIFIdzCSvkmA.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-3dPsi1yoyAT6BAl.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-tmVWctnKWdlLn9M.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-64UgL8EIpkabJkK.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-C0jjshdbEs8HjZy.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-X7iZmtFkCVkKFpQ.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-cvkrKG6XHYja7Lb.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-hvtFxKpvR2IZfya.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-dYVi4825tXwGHjP.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-ZqNg7O2NlU0a7DR.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-RSIz8tUeU9szhf7.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-5hci781QzjBOuSX.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-6qwvZ1ejaeLSrSk.png"                   // ... (rest of your image URLs)
+            ];
+            const detector = new window.CombinedDetector();
+            await detector.initialize();
+
+            for (const imageUrl of imageUrls) {
+                try {
+                    const result = await detector.analyzeImage(imageUrl);
+                    displayImageWithResults(imageUrl, result);
+                } catch (error) {
+                    console.error("Error processing image:", imageUrl, error);
+                }
+            }
+        };
+
+        function displayImageWithResults(imageUrl, result) {
+            const contentDiv = document.querySelector('.content');
+            const container = document.createElement('div');
+            container.className = 'image-container';
+
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = "Classified Image";
+
+            const resultOverlay = document.createElement('div');
+            resultOverlay.className = 'result-overlay';
+            resultOverlay.innerHTML = `NSFW: ${result.isNSFW ? 'Yes' : 'No'}`;
+
+            container.appendChild(imgElement);
+            container.appendChild(resultOverlay);
+            contentDiv.appendChild(container);
+        }
+    </script>
+</body>
+</html>
