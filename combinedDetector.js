@@ -7,8 +7,8 @@ class CombinedDetector {
     async initialize() {
         await Promise.all([
             this.nsfwDetector.loadModel(),
-            faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
-            faceapi.nets.ageGenderNet.loadFromUri('./models')
+            faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+            faceapi.nets.ageGenderNet.loadFromUri('/models')
         ]);
     }
 
@@ -25,6 +25,14 @@ class CombinedDetector {
             isNSFW,
             age: ageResult,
             nsfwResults: nsfwResult.results
+        };
+    }
+
+    async isNsfw(imageUrl) {
+        const result = await this.analyzeImage(imageUrl);
+        return {
+            isNSFW: result.isNSFW,
+            results: result.nsfwResults
         };
     }
 
@@ -51,4 +59,3 @@ class CombinedDetector {
 }
 
 window.CombinedDetector = CombinedDetector;
-
