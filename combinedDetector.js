@@ -7,8 +7,8 @@ class CombinedDetector {
     async initialize() {
         await Promise.all([
             this.nsfwDetector.loadModel(),
-            faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
-            faceapi.nets.ageGenderNet.loadFromUri('./models')
+            faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+            faceapi.nets.ageGenderNet.loadFromUri('/models')
         ]);
     }
 
@@ -59,3 +59,4 @@ class CombinedDetector {
 }
 
 window.CombinedDetector = CombinedDetector;
+
