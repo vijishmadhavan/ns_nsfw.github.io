@@ -2,6 +2,7 @@ class CombinedDetector {
     constructor() {
         this.nsfwDetector = new window.NsfwDetector();
         this.ageThreshold = 22;
+        this.neutralThreshold = 0.9; // 90% threshold for neutral class
     }
 
     async initialize() {
@@ -13,11 +14,31 @@ class CombinedDetector {
     }
 
     async analyzeImage(imageUrl) {
+        const nsfwResult = await this.nsfwDetector.isNsfw(imageUrl);
+
+        if (nsfwResult.isNSFW) {
+            // If already NSFW, skip age detection
+            return {
+                isNSFW: true,
+                age: null,
+                nsfwResults: nsfwResult.results
+            };
+        }
+
+        // Check if the neutral class probability is above the threshold
+        const neutralProb = nsfwResult.results.find(r => r.className === 'neutral')?.probability || 0;
+        if (neutralProb > this.neutralThreshold) {
+            // If highly neutral, skip age detection
+            return {
+                isNSFW: false,
+                age: null,
+                nsfwResults: nsfwResult.results
+            };
+        }
+
+        // Only load the image and perform age detection if not NSFW and not highly neutral
         const img = await this.loadImage(imageUrl);
-        const [nsfwResult, ageResult] = await Promise.all([
-            this.nsfwDetector.isNsfw(imageUrl),
-            this.detectAge(img)
-        ]);
+        const ageResult = await this.detectAge(img);
 
         const isNSFW = nsfwResult.isNSFW || (ageResult !== null && ageResult < this.ageThreshold);
 
