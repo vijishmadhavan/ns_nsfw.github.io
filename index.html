@@ -97,11 +97,14 @@
             const detector = new window.NsfwDetector();
             await detector.initialize();
 
+            // Modified to process images individually and display them as soon as they're classified
             for (const imageUrl of imageUrls) {
                 try {
                     const result = await detector.isNsfw(imageUrl);
                     if (!result.isNSFW) {
-                        displayImageWithResults(imageUrl, result);
+                        displayImage(imageUrl);
+                    } else {
+                        console.log("NSFW content not displayed:", imageUrl);
                     }
                 } catch (error) {
                     console.error("Error processing image:", imageUrl, error);
@@ -109,7 +112,7 @@
             }
         };
 
-        function displayImageWithResults(imageUrl, result) {
+        function displayImage(imageUrl) {
             const contentDiv = document.querySelector('.content');
             const container = document.createElement('div');
             container.className = 'image-container';
@@ -117,6 +120,7 @@
             const imgElement = document.createElement('img');
             imgElement.src = imageUrl;
             imgElement.alt = "Safe Image";
+            imgElement.style = "max-width:100%; height:auto; margin-bottom: 20px;";
 
             container.appendChild(imgElement);
             contentDiv.appendChild(container);
@@ -124,3 +128,4 @@
     </script>
 </body>
 </html>
+
