@@ -6,7 +6,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.2/dist/face-api.js"></script>
     <script src="./nsfwDetectorClass.js"></script>
-    <script src="./combinedDetector.js"></script>
     <style>
         .image-container {
             display: inline-block;
@@ -95,7 +94,7 @@
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-5hci781QzjBOuSX.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-6qwvZ1ejaeLSrSk.png"                   // ... (rest of your image URLs)
             ];
-            const detector = new window.CombinedDetector();
+            const detector = new window.NsfwDetector();
             await detector.initialize();
 
             for (const imageUrl of imageUrls) {
@@ -132,5 +131,3 @@
     </script>
 </body>
 </html>
-
-
