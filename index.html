@@ -97,20 +97,26 @@
             const detector = new window.NsfwDetector();
             await detector.initialize();
 
-            // Modified to process images individually and display them as soon as they're classified
-            for (const imageUrl of imageUrls) {
-                try {
-                    const result = await detector.isNsfw(imageUrl);
-                    if (!result.isNSFW) {
-                        displayImage(imageUrl);
-                    } else {
-                        console.log("NSFW content not displayed:", imageUrl);
-                    }
-                } catch (error) {
-                    console.error("Error processing image:", imageUrl, error);
-                }
-            }
+            // Process one image immediately and queue the rest
+            imageUrls.forEach((imageUrl, index) => {
+                setTimeout(() => {
+                    processImage(imageUrl, detector);
+                }, index * 100); // Small delay between starts to prevent overwhelming
+            });
         };
+
+        async function processImage(imageUrl, detector) {
+            try {
+                const result = await detector.isNsfw(imageUrl);
+                if (!result.isNSFW) {
+                    displayImage(imageUrl);
+                } else {
+                    console.log("NSFW content not displayed:", imageUrl);
+                }
+            } catch (error) {
+                console.error("Error processing image:", imageUrl, error);
+            }
+        }
 
         function displayImage(imageUrl) {
             const contentDiv = document.querySelector('.content');
@@ -128,4 +134,5 @@
     </script>
 </body>
 </html>
+
 
