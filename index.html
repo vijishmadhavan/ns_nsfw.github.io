@@ -43,21 +43,6 @@
     <script>
         window.onload = async () => {
             const imageUrls = [
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-m2ukiW67eP8Irne.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-SPSgUoP8QeCNc36.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-sydUc2n4aYPzBNi.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-bE7D1Lqjkgb0m5o.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-7P3t5q1MaB0FR1V.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-zuF6wdrkwcwhj6E.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-atgCGYBJhvY7pfl.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-csE8twIfxdLscQx.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-K9PnfaXGj8pXSf4.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-p9eAnbubYIvHMRy.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-XLcs41aN6iNGmUH.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-a2s0FHugVwRatfQ.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-P4bKN2mYkkBPRDX.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-x5r9Yjj9tjAusWA.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-R7DstGj2gcqS1l8.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-Ge99rdd35UHuPpk.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-TxIdsN6LrfW2XT8.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-qgVLr05XzXYB5Go.png",
@@ -92,7 +77,22 @@
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-ZqNg7O2NlU0a7DR.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-RSIz8tUeU9szhf7.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-5hci781QzjBOuSX.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-6qwvZ1ejaeLSrSk.png"                   // ... (rest of your image URLs)
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-6qwvZ1ejaeLSrSk.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-m2ukiW67eP8Irne.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-SPSgUoP8QeCNc36.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-sydUc2n4aYPzBNi.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-bE7D1Lqjkgb0m5o.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-7P3t5q1MaB0FR1V.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-zuF6wdrkwcwhj6E.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-atgCGYBJhvY7pfl.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-csE8twIfxdLscQx.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-K9PnfaXGj8pXSf4.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-p9eAnbubYIvHMRy.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-XLcs41aN6iNGmUH.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-a2s0FHugVwRatfQ.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-P4bKN2mYkkBPRDX.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-x5r9Yjj9tjAusWA.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-R7DstGj2gcqS1l8.png",// ... (rest of your image URLs)
             ];
             const detector = new window.NsfwDetector();
             await detector.initialize();
